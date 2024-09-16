@@ -18,6 +18,11 @@ def verificar_ganador(tablero, jugador):
     for i in range(3):
         #Devuelve verdadero si: todas las celdas de una fila equivalen a "X" o "O". 
         #En la segunda condicion del or, revisa que todas las celdas de una columna sean iguales a "X" o "O"
+        # for celda in tablero[i]:
+        #     if celda != jugador:
+        #         return False
+            
+        #     pass
         if all([celda == jugador for celda in tablero[i]]) or \
            all([tablero[j][i] == jugador for j in range(3)]):
             return True
@@ -102,6 +107,33 @@ Jugador X: {puntajes["X"]} Puntos
 Jugador O: {puntajes["O"]} Puntos""")
 
 
+def creditos():
+    conjunto = {
+        "Ariel Tapia", 
+        "Mauricio Maneiro", 
+        "Fabricio Capone", 
+        "Agustin Blasco",
+    }
+
+    print("\nJuego desarrollado por el Grupo 1. Miembros:")
+    for nombre in conjunto:
+        print(f"- {nombre}")
+
+
+def main():
+    while True:
+        juego_tres_en_raya(puntajes)
+        #Imprimimos el diccionario puntajes.
+        imprimir_puntajes(puntajes)
+        #Se pregunta si se desea jugar de nuevo, hacemos uso de .lower() en caso de que el usuario
+        #ingrese un caracter en mayúscula.
+        jugar_de_nuevo = input("¿Quieres jugar otra vez? (s/n): ")
+        #Si el valor no es igual a "s", se entra al if y con el break salimos del while.
+        if jugar_de_nuevo.lower() != "s":
+            creditos()
+            break
+
+
 #Esta linea asegura que este bloque de codigo se corra solamente si se ejecuta este archivo.
 #En cambio, si esto es importado como modulo este bloque no correria automaticamente.
 if __name__ == "__main__":
@@ -112,13 +144,4 @@ if __name__ == "__main__":
     filas = ["a", "b", "c"]
     columnas = ["1", "2", "3"]
 
-    while True:
-        juego_tres_en_raya(puntajes)
-        #Imprimimos el diccionario puntajes.
-        imprimir_puntajes(puntajes)
-        #Se pregunta si se desea jugar de nuevo, hacemos uso de .lower() en caso de que el usuario
-        #ingrese un caracter en mayúscula.
-        jugar_de_nuevo = input("¿Quieres jugar otra vez? (s/n): ")
-        #Si el valor no es igual a "s", se entra al if y con el break salimos del while.
-        if jugar_de_nuevo.lower() != "s":
-            break
+    main()
