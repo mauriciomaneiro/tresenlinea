@@ -1,11 +1,16 @@
 #Función para imprimir el trablero que se recibe. 
 def imprimir_tablero(tablero):
+    
+    print("  1   2   3")
     #Se recorre cada fila en tablero.
-    for fila in tablero:       
+    for i in range(len(tablero)):
         #Esta línea une cada elemento de la fila con un " | " en medio.
-        print(" | ".join(fila))
+        print(f"{filas[i]} {' | '.join(tablero[i])}")
         #Esta linea imprime 10 " - " para separar visualmente cada fila que vamos imprimiendo.
-        print("-" * 10)
+        if i < len(tablero) - 1:
+            print(f"  {'-' * 10}")
+    print("\n")
+
 
 #Esta función toma el tablero y el jugador, recorre el tablero y verifica si hay un ganador.
 def verificar_ganador(tablero, jugador):
@@ -23,6 +28,12 @@ def verificar_ganador(tablero, jugador):
     #Si ninguna de estas condiciones se cumple, la función llega a este punto y devuelve False, el juego sigue.
     return False
 
+
+def validar_coordenadas(coordenadas: str, filas: list[str], columnas: list[str]) -> bool:
+    # Se valida que las coordenadas coincidan con las filas y columnas posibles
+    return coordenadas[0].lower() in filas and coordenadas[1] in columnas
+
+
 #Esta función inicia las variables turno, movimientos, jugadores y ademas genera el tablero.
 def juego_tres_en_raya(puntajes):
     tablero = [[" " for _ in range(3)] for _ in range(3)]
@@ -30,8 +41,8 @@ def juego_tres_en_raya(puntajes):
     turno = 0
     movimientos = 0
 
-    #Mientras movimientos sea menor a 9, los jugadores podrán seguir jugando. Al momento de que movimientos 
-    #sea 9, el tablero se verá completo.
+    #Mientras movimientos sea menor a 9, los jugadores podrán seguir jugando. 
+    # Al momento de que movimientos sea 9, el tablero se verá completo.
     while movimientos < 9:
         #Llamamos a la función tablero
         imprimir_tablero(tablero)
@@ -41,9 +52,20 @@ def juego_tres_en_raya(puntajes):
         print(f"Turno del jugador {jugador_actual}")
 
         #Le pedimos el valor de la fila y columna en la que quiere jugar el jugador_actual.
-        #DEBERIAMOS VERIFICAR QUE INGRESE CORRECTAMENTE ESTOS VALORES   
-        fila = int(input("Ingresa la fila (0, 1, 2): "))
-        columna = int(input("Ingresa la columna (0, 1, 2): "))
+        while True:
+            coordenadas = input("Ingrese la Fila (Letras: a, b, c) y Columna (Numeros: 1, 2, 3). Ejemplo 'a3': ")
+
+            if len(coordenadas) == 2:
+                if not(validar_coordenadas(coordenadas, filas, columnas)):
+                    print(f"La Coordenada '{coordenadas}' es incorrecta, intenta de nuevo.")
+                    continue
+                else:
+                    break
+            else:
+                print(f"La Coordenada '{coordenadas}' es incorrecta, intenta de nuevo.")
+                
+        fila = filas.index(coordenadas[0])
+        columna = columnas.index(coordenadas[1])
 
         #Verificamos que la ubicación este vacia y si es asi, le asignamos el valor de "X" o "O"
         if tablero[fila][columna] == " ":
@@ -72,15 +94,28 @@ def juego_tres_en_raya(puntajes):
     imprimir_tablero(tablero)
     print("¡Es un empate!")
 
+
+def imprimir_puntajes(puntajes: dict) -> None:
+    print(f"""Tabla de Puntajes:
+{'-'*20}
+Jugador X: {puntajes["X"]} Puntos
+Jugador O: {puntajes["O"]} Puntos""")
+
+
 #Esta linea asegura que este bloque de codigo se corra solamente si se ejecuta este archivo.
 #En cambio, si esto es importado como modulo este bloque no correria automaticamente.
 if __name__ == "__main__":
     #Usamos un Diccionario para tener el valor las partidas ganadas por jugador.
     puntajes = {"X": 0, "O": 0}
+
+    # Se definen las Filas y Columnas posibles
+    filas = ["a", "b", "c"]
+    columnas = ["1", "2", "3"]
+
     while True:
         juego_tres_en_raya(puntajes)
         #Imprimimos el diccionario puntajes.
-        print(f"Puntajes: {puntajes}")
+        imprimir_puntajes(puntajes)
         #Se pregunta si se desea jugar de nuevo, hacemos uso de .lower() en caso de que el usuario
         #ingrese un caracter en mayúscula.
         jugar_de_nuevo = input("¿Quieres jugar otra vez? (s/n): ")
