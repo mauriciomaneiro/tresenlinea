@@ -98,7 +98,8 @@ def juego_tres_en_raya(puntajes, jugador_x, jugador_o):
     #Si movimientos es 9, se llega a este punto dado a que no se puede ocupar ningún lugar mas
     # y se da un empate.
     imprimir_tablero(tablero)
-    print("¡Es un empate!")
+    print("¡Es un empate. Nadie suma puntos!")
+    return puntajes
 
 
 def imprimir_puntajes(puntajes: dict, jugador_x, jugador_o) -> None:
@@ -108,7 +109,7 @@ Jugador {jugador_x} (X): {puntajes[jugador_x]} Puntos
 Jugador {jugador_o} (O): {puntajes[jugador_o]} Puntos""")
 
 
-def creditos():
+def creditos() -> None:
     conjunto = {
         "Ariel Tapia", 
         "Mauricio Maneiro", 
@@ -117,8 +118,16 @@ def creditos():
     }
 
     print("\nJuego desarrollado por el Grupo 1. Miembros:")
-    for nombre in conjunto:
-        print(f"- {nombre}")
+    imprimir_nombres(conjunto)
+
+
+def imprimir_nombres(nombres: set) -> None:
+    if not nombres:
+        return
+    
+    nombre = nombres.pop()
+    print(f"- {nombre}")
+    imprimir_nombres(nombres)
 
 
 def main():
@@ -164,7 +173,13 @@ def main():
                 break
 
 
-def actualizar_puntajes(puntajes: dict, jugador_x: str, nuevo_puntaje_x: int, jugador_o: str, nuevo_puntaje_o: int):
+def actualizar_puntajes(
+        puntajes: dict, 
+        jugador_x: str, 
+        nuevo_puntaje_x: int, 
+        jugador_o: str, 
+        nuevo_puntaje_o: int
+):
     
     puntajes[jugador_x] = nuevo_puntaje_x
     puntajes[jugador_o] = nuevo_puntaje_o
@@ -193,8 +208,11 @@ def leer_puntajes(listado_puntajes: dict[int], nombre_jugador: str) -> int:
 def ingresar_jugador(jugador: str) -> None:
     while True:
         nombre_jugador = input(f"Ingrese el nombre del Jugador {jugador}: ")
-        return nombre_jugador.casefold() if nombre_jugador else \
-        print("No se ha ingresado ningun nombre, intente nuevamente.")
+        if nombre_jugador:
+            return nombre_jugador.casefold()
+        else:
+            print("No se ha ingresado ningun nombre, intente nuevamente.")
+            continue
             
 
 def leer_jugadores() -> dict:
