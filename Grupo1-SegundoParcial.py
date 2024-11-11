@@ -216,8 +216,13 @@ def ingresar_jugador(jugador: str) -> None:
             
 
 def leer_jugadores() -> dict:
-    with open("jugadores.json", "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with open("jugadores.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print("El Archivo de Puntajes no existe! Creando nuevo archivo...")
+        with open("jugadores.json", "w", encoding="utf-8") as f:
+            return {}
 
 
 #Esta linea asegura que este bloque de codigo se corra solamente si se ejecuta este archivo.
